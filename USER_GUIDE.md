@@ -59,7 +59,7 @@ Multi-language support (Vietnamese and English).
 ### Quick Start with Docker
 
 ```bash
-git clone https://github.com/your-username/kanban-task-management.git
+git clone https://github.com/mthduy/kanban-task-management.git
 cd kanban-task-management
 docker-compose up --build -d
 ```
@@ -108,13 +108,16 @@ The frontend will run on http://localhost:5174
 ```
 ├── backend/
 │   ├── src/
+│   │   ├── configs/
 │   │   ├── controllers/     # Route handlers
 │   │   ├── models/         # MongoDB schemas
 │   │   ├── routes/         # API routes
 │   │   ├── middlewares/    # Auth & validation
 │   │   ├── services/       # Business logic
 │   │   ├── utils/          # Helper functions
+│   │   ├── validations/
 │   │   └── server.ts       # App entry point
+│   │   └── socket.ts       # App entry point
 │   ├── uploads/            # File attachments
 │   └── Dockerfile
 ├── frontend/
