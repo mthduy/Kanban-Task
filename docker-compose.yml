@@ -1,0 +1,85 @@
+services:
+  # ======================
+  # MongoDB
+  # ======================
+  mongodb:
+    image: mongo:7.0
+    container_name: kanban_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: kanban_db
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    healthcheck:
+      test: >
+        mongosh "mongodb://admin:password123@localhost:27017/admin" --eval "db.runCommand('ping').ok"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kanban_network
+
+  # ======================
+  # Backend
+  # ======================
+  backend:
+    build: ./backend
+    container_name: kanban_backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      PORT: 5001
+      # MONGODB_CONNECTIONSTRING and other secrets are loaded from ./backend/.env
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:5001', r => process.exit(r.statusCode === 200 ? 0 : 1))"
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - kanban_network
+
+  # ======================
+  # Frontend
+  # ======================
+  frontend:
+    build: ./frontend
+    container_name: kanban_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://backend:5001
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - kanban_network
+
+volumes:
+  mongo_data:
+  mongo_config:
+
+networks:
+  kanban_network:
+    driver: bridge

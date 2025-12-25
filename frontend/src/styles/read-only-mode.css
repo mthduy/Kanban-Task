@@ -1,0 +1,50 @@
+// Custom CSS animations for read-only mode
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-in {
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.slide-in-from-top {
+  animation-name: slideInFromTop;
+}
+
+.duration-300 {
+  animation-duration: 300ms;
+}
+
+/* Enhanced disabled button styles */
+button:disabled {
+  filter: grayscale(30%);
+}
+
+button:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Watermark styles */
+.watermark-text {
+  user-select: none;
+  pointer-events: none;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
