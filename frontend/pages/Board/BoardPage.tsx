@@ -467,6 +467,9 @@ const BoardPage = () => {
             ...s.filter((x) => String(x._id) !== String(result.list._id)), //prevent duplicate lists
             result.list, //append in the end
           ]);
+          
+          // Emit socket event for real-time updates
+        socketService.emitListCreated(String(board._id), result.list as any);
           toast.success(result.message || 'Tạo danh sách thành công');
         }
         //if no board._id
@@ -505,6 +508,10 @@ const BoardPage = () => {
       if (board && board._id) {
         const result = await listService.update(String(board._id), editingListId, { title: editListTitle });
         setLists((s) => s.map((l) => (String(l._id) === String(result.list._id) ? result.list : l)));
+        
+        // Emit socket event for real-time updates
+        socketService.emitListUpdated(String(board._id), result.list as any, 'updated');
+        
         toast.success(result.message);
       } else {
         setLists((s) => s.map((l) => (String(l._id) === String(editingListId) ? { ...l, title: editListTitle } : l)));
@@ -533,6 +540,10 @@ const BoardPage = () => {
       if (board && board._id) {
         const result = await listService.update(String(board._id), listId, { title });
         setLists((s) => s.map((l) => (String(l._id) === String(result.list._id) ? result.list : l)));
+        
+        // Emit socket event for real-time updates
+        socketService.emitListUpdated(String(board._id), result.list as any, 'updated');
+        
         toast.success(result.message || 'Cập nhật danh sách thành công');
       } else {
         setLists((s) => s.map((l) => (String(l._id) === String(listId) ? { ...l, title } as ListItem : l)));
@@ -587,6 +598,10 @@ const BoardPage = () => {
         const result = await cardService.create(String(board._id), addCardListId, newCardTitle.trim(), position, newCardDesc.trim());
         setCards((s) => [...s, result.card]);
         setAllCards((s) => [...s, result.card]);
+        
+        // Emit socket event for real-time updates
+        socketService.emitCardCreated(String(board._id), result.card as any);
+        
         toast.success(result.message);
       } else {
         const id = `temp-card-${Date.now()}`;
@@ -625,6 +640,10 @@ const BoardPage = () => {
         const result = await cardService.update(String(board._id), String(listId), editingCardId, { title: editCardTitle, description: editCardDesc });
         setAllCards((s) => s.map((c) => (String(c._id) === String(result.card._id) ? result.card : c)));
         upsertCardLocal(result.card);
+        
+        // Emit socket event for real-time updates
+        socketService.emitCardUpdated(String(board._id), result.card as any, 'updated');
+        
         toast.success(result.message);
       } else {
         setAllCards((s) => s.map((c) => (String(c._id) === String(editingCardId) ? { ...c, title: editCardTitle, description: editCardDesc } : c)));
@@ -655,6 +674,10 @@ const BoardPage = () => {
         const result = await cardService.remove(String(board._id), String(listId), deleteCardId);
         setCards((s) => s.filter((c) => String(c._id) !== String(deleteCardId)));
         setAllCards((s) => s.filter((c) => String(c._id) !== String(deleteCardId)));
+        
+        // Emit socket event for real-time updates
+        socketService.emitCardDeleted(String(board._id), deleteCardId, String(listId));
+        
         toast.success(result.message);
       } else {
         setCards((s) => s.filter((c) => String(c._id) !== String(deleteCardId)));
@@ -699,6 +722,10 @@ const BoardPage = () => {
           setCards((s) => s.filter((c) => String(c.listId) !== String(deleteListId)));
           setAllCards((s) => s.filter((c) => String(c.listId) !== String(deleteListId)));
         }
+        
+        // Emit socket event for real-time updates
+        socketService.emitListDeleted(String(board._id), deleteListId);
+        
         toast.success(result.message);
       } else {
         setLists((s) => s.filter((l) => String(l._id) !== String(deleteListId)));

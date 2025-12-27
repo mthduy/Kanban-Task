@@ -111,7 +111,13 @@
     "createNewWorkspace": "Create new workspace",
     "emailMembers":"Member Email",
     "workspaceMembers":"Workspace Members",
-    "msg":"You can invite members to your workspace to collaborate on boards together."
+    "msg":"You can invite members to your workspace to collaborate on boards together.", 
+    "noWorkspaces":"No workspaces yet", 
+    "dueCard":"Cards due tomorrow",
+    "inviteToBoard":"invited you to board",
+    "acceptInvite":"Accept Invite",
+    "declineInvite":"Decline Invite",
+    "noCardsDue":"No cards due soon"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -248,5 +254,11 @@
     "cancel": "Cancel",
     "logout": "Logout",
     "updated": "Profile updated"
+  }, 
+  "dayOptions": {
+  "motNgay": "1 day",
+  "baNgay": "3 days", 
+  "bayNgay": "7 days",
+  "bamuoiNgay": "30 days"
   }
 }

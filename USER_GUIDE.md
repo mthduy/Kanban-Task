@@ -59,9 +59,10 @@ Multi-language support (Vietnamese and English).
 ### Quick Start with Docker
 
 ```bash
-git clone https://github.com/mthduy/kanban-task-management.git
+git clone https://github.com/mthduy/kanban-task.git
 cd kanban-task-management
 docker-compose up --build -d
+
 ```
 
 The application will be available at:
@@ -84,7 +85,7 @@ Create `.env` file in backend directory:
 PORT=5001
 MONGODB_URI=mongodb://localhost:27017/kanban_task_management
 JWT_SECRET=your_jwt_secret_key
-CORS_ORIGIN=http://localhost:5174
+CORS_ORIGIN=http://localhost:5173
 ```
 
 Start MongoDB and run backend:
@@ -101,7 +102,7 @@ npm install
 npm run dev
 ```
 
-The frontend will run on http://localhost:5174
+The frontend will run on http://localhost:5173
 
 ## Project Structure
 

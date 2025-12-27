@@ -77,11 +77,13 @@ class SocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
+      console.log('🚀 Socket connected successfully');
       this.reconnectAttempts = 0;
       this.isConnecting = false;
     });
 
     this.socket.on('disconnect', (reason) => {
+      console.log('❌ Socket disconnected:', reason);
       this.isConnecting = false;
       
       // Only attempt to reconnect for certain disconnect reasons
@@ -94,6 +96,7 @@ class SocketService {
     });
 
     this.socket.on('connect_error', (error) => {
+      console.error('❌ Socket connection error:', error);
       if (error.message === 'Authentication failed') {
         console.error('Socket authentication failed');
         useAuthStore.getState().logout();

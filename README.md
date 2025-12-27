@@ -2,6 +2,12 @@
 
 A collaborative task management application built with React, Node.js, and MongoDB. The application enables creating workspaces, boards, lists, and cards with real-time collaboration capabilities.
 
+## Screenshot
+
+![Kanban Task Management Application](frontend/public/fe.png)
+
+_Main board view showing the drag-and-drop interface with multiple lists and cards_
+
 ## Features
 
 ### Workspace Management
@@ -146,7 +152,7 @@ MAX_FILE_SIZE=10485760  # 10MB
 UPLOAD_PATH=./uploads
 
 # CORS
-FRONTEND_URL=http://localhost:5174
+FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend Environment Variables

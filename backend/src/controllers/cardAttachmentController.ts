@@ -7,7 +7,7 @@ import {
   deleteFile,
   readFile,
   generateFileName,
-  getFileSize,
+
   getMimeType,
   getFileUrl,
 } from '../utils/attachmentStorage.js';

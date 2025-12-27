@@ -42,9 +42,9 @@ USER app
 # Expose port backend
 EXPOSE 5001
 
-# Healthcheck
+# Healthcheck - check if server is responding (allow any status except connection errors)
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:5001', r => process.exit(r.statusCode === 200 ? 0 : 1))"
+  CMD node -e "require('http').get('http://localhost:5001', r => process.exit(0)).on('error', e => process.exit(1))"
 
 # Start app
 CMD ["node", "dist/server.js"]

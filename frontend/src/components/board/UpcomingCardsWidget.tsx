@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 const UpcomingCardsWidget = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const UpcomingCardsWidget = () => {
       <div className="p-3 sm:p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 mb-4">
           <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="font-medium sm:font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100">Thẻ sắp đến hạn</h3>
+          <h3 className="font-medium sm:font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100">{t('workspace.dueCard')}</h3>
         </div>
         <div className="text-center py-6 sm:py-8">
           <div className="inline-block animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-b-2 border-blue-600 dark:border-blue-400"></div>
@@ -97,7 +98,7 @@ const UpcomingCardsWidget = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-4">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
-          <h3 className="font-medium sm:font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100">Thẻ sắp đến hạn</h3>
+          <h3 className="font-medium sm:font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100">{t('workspace.dueCard')}</h3>
           {upcomingCards.length > 0 && (
             <span className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded-full border border-blue-200 dark:border-blue-700">
               {upcomingCards.length}
@@ -109,10 +110,10 @@ const UpcomingCardsWidget = () => {
           onChange={(e) => setDaysAhead(Number(e.target.value))}
           className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
-          <option value={1}>1 ngày</option>
-          <option value={3}>3 ngày</option>
-          <option value={7}>7 ngày</option>
-          <option value={30}>30 ngày</option>
+          <option value={1}>{t('dayOptions.motNgay')}</option>
+          <option value={3}>{t('dayOptions.baNgay')}</option>
+          <option value={7}>{t('dayOptions.bayNgay')}</option>
+          <option value={30}>{t('dayOptions.bamuoiNgay')}</option>
         </select>
       </div>
 
@@ -125,7 +126,7 @@ const UpcomingCardsWidget = () => {
       {upcomingCards.length === 0 ? (
         <div className="text-center py-6 sm:py-8">
           <Clock className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Không có thẻ nào sắp đến hạn</p>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('workspace.noCardsDue')}</p>
         </div>
       ) : (
         <div className="space-y-2 sm:space-y-3">

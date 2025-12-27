@@ -112,7 +112,13 @@
     "createNewWorkspace": "Tạo không gian mới", 
     "emailMembers":"Email thành viên",
     "workspaceMembers":"Thành viên không gian",
-    "msg":"Bạn có thể mời thành viên vào không gian làm việc của mình để cùng cộng tác trên các bảng."
+    "msg":"Bạn có thể mời thành viên vào không gian làm việc của mình để cùng cộng tác trên các bảng.", 
+    "noWorkspaces":"Chưa có không gian làm việc", 
+    "dueCard":"Thẻ sẽ đến hạn vào ngày mai", 
+    "inviteToBoard":"đã mời bạn tham gia bảng", 
+    "acceptInvite":"Chấp nhận lời mời", 
+    "declineInvite":"Từ chối lời mời", 
+    "noCardsDue":"Chưa có thẻ nào đến hạn"
   },
   "dashboard": {
     "title": "Bảng điều khiển",
@@ -252,5 +258,11 @@
     "cancel": "Hủy bỏ",
     "logout": "Đăng xuất",
     "updated": "Đã cập nhật hồ sơ"
-  }
+  }, 
+    "dayOptions": { 
+  "motNgay": "1 Ngày", 
+  "baNgay": "3 Ngày",
+  "bayNgay": "7 Ngày",
+  "bamuoiNgay": "30 Ngày"
+}
 }
