@@ -245,3 +245,23 @@ export function emitToBoardRoom(boardId: string, event: string, data: any) {
     socketInstance.to(`board:${boardId}`).emit(event, data);
   }
 }
+
+// Helper function to emit to specific user
+export function emitToUser(userId: string, event: string, data: any) {
+  if (socketInstance) {
+    const sockets = Array.from(socketInstance.sockets.sockets.values());
+    const userSockets = sockets.filter((socket: any) => socket.userId === userId);
+    
+    console.log('🔌 emitToUser:', {
+      targetUserId: userId,
+      event,
+      totalSockets: sockets.length,
+      userSocketsFound: userSockets.length,
+      allConnectedUserIds: sockets.map((s: any) => s.userId)
+    });
+    
+    userSockets.forEach((socket: any) => {
+      socket.emit(event, data);
+    });
+  }
+}

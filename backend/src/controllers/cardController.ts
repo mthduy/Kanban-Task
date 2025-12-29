@@ -392,6 +392,13 @@ export const updateCard = async (req: Request<{ cardId: string }, never, UpdateC
       const oldList = await List.findById(String(originalCard.listId));
       const oldListTitle = oldList?.title || 'Unknown';
       
+      console.log('📦 Card moved - checking members:', {
+        cardTitle: updated.title,
+        members: updated.members,
+        createdBy: updated.createdBy,
+        currentUserId: String(userId)
+      });
+      
       // Get all members to notify (card members + card creator, excluding current user)
       const recipientIds = new Set<string>();
       if (updated.members) {
@@ -406,13 +413,15 @@ export const updateCard = async (req: Request<{ cardId: string }, never, UpdateC
         recipientIds.add(String((updated.createdBy as any)._id));
       }
       
+      console.log('📧 Recipients to notify:', Array.from(recipientIds));
+      
       // Send notification to all recipients
       for (const recipientId of recipientIds) {
         await createNotification({
           recipient: new mongoose.Types.ObjectId(recipientId),
           sender: new mongoose.Types.ObjectId(String(userId)),
           type: 'card_moved',
-          message: updated.title,
+          message: `đã di chuyển thẻ "${updated.title}" từ "${oldListTitle}" sang "${newListTitle}"`,
           relatedCard: updated._id as mongoose.Types.ObjectId,
           relatedBoard: updated.boardId as mongoose.Types.ObjectId
         });

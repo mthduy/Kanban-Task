@@ -332,6 +332,24 @@ class SocketService {
     }
   }
 
+  onNotificationCreated(callback: (data: { notification: unknown }) => void) {
+    if (this.socket) {
+      this.socket.on('notification-created', callback);
+    }
+  }
+
+  onAttachmentAdded(callback: (data: SocketEventData) => void) {
+    if (this.socket) {
+      this.socket.on('attachment-added', callback);
+    }
+  }
+
+  onAttachmentDeleted(callback: (data: SocketEventData) => void) {
+    if (this.socket) {
+      this.socket.on('attachment-deleted', callback);
+    }
+  }
+
   // Remove specific event listeners
   off(event: string, callback?: (data: SocketEventData) => void) {
     if (this.socket) {

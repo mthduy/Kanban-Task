@@ -317,8 +317,6 @@ const BoardPage = () => {
 
         return arrayMove(items, oldIndex, newIndex);
       });
-
-      toast.success('Đã thay đổi thứ tự danh sách');
       return;
     }
 
@@ -386,8 +384,6 @@ const BoardPage = () => {
         const reordered = arrayMove(listCards, oldIndex, newIndex);
         return [...otherCards, ...reordered];
       });
-      
-      toast.success('Đã thay đổi vị trí thẻ');
     }
   };
 
@@ -926,7 +922,6 @@ const BoardPage = () => {
             return merged;
           });
         }
-        toast.success(result.message || 'Di chuyển thẻ thành công');
       } else {
         // Local-only board: update card listId and keep sort by createdAt
         setCards((s) => {
@@ -939,7 +934,6 @@ const BoardPage = () => {
           updated.sort((a, b) => (new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()));
           return updated;
         });
-        toast.success('Di chuyển thẻ thành công');
       }
     } catch (err) {
       console.error('move card error', err);
@@ -1507,10 +1501,10 @@ const BoardPage = () => {
     <div className="flex flex-col h-screen pt-14 sm:pt-0" style={getBackgroundStyle()}>
       {/* Compact Modern Header */}
       <header className="bg-card/80 backdrop-blur-sm px-6 py-2 sm:py-3.5 flex items-center justify-between shadow-sm border-b border-border/50 fixed top-0 left-0 right-0 z-50 sm:static">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-shrink min-w-0">
         
 
-            <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-3">
               <div
                 className="w-9 h-9 rounded-xl bg-gradient-chat flex items-center justify-center shadow-soft overflow-hidden cursor-pointer"
                 onClick={() => window.location.href = "/"}
@@ -1523,7 +1517,7 @@ const BoardPage = () => {
               </div>
             </div>
 
-          <div className="h-8 w-px bg-border mx-2"></div>
+          <div className="h-8 w-px bg-border mx-2 hidden sm:block"></div>
 
           {isEditingBoardTitle ? (
             <Input
@@ -1543,9 +1537,9 @@ const BoardPage = () => {
               autoFocus
             />
           ) : (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2 min-w-0 flex-shrink">
               <h1
-                className={`text-lg sm:text-xl font-bold text-foreground truncate max-w-md ${canEdit ? 'cursor-pointer hover:text-primary/80' : 'cursor-default'} transition-colors`}
+                className={`text-lg sm:text-xl font-bold text-foreground truncate max-w-[200px] lg:max-w-sm ${canEdit ? 'cursor-pointer hover:text-primary/80' : 'cursor-default'} transition-colors`}
                 onDoubleClick={() => {
                   if (canEdit) {
                     setInlineBoardTitle(board?.title || '');
@@ -1571,25 +1565,25 @@ const BoardPage = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <Button 
             variant="outline" 
             size="sm"
             className={`glass border-border hover:bg-accent rounded-xl h-9 px-3 transition-all ${
-              !isOwner ? 'opacity-60 cursor-not-allowed saturate-50' : ''
+              isViewer ? 'opacity-60 cursor-not-allowed saturate-50' : ''
             }`}
             onClick={() => {
-              if (!isOwner) {
-                toast.warning('🎨 Chỉ chủ sở hữu board mới có thể thay đổi nền', {
-                  description: isViewer ? 'Bạn đang ở chế độ chỉ xem' : 'Bạn cần là chủ sở hữu board',
+              if (isViewer) {
+                toast.warning('🎨 Không thể thay đổi nền ở chế độ chỉ xem', {
+                  description: 'Bạn đang ở chế độ chỉ xem',
                   duration: 4000
                 });
                 return;
               }
               setShowBackgroundPicker(true);
             }}
-            disabled={!isOwner}
-            title={!isOwner ? '🔒 Chỉ chủ sở hữu mới có thể thay đổi nền' : t('board.background')}
+            disabled={isViewer}
+            title={isViewer ? '🔒 Chế độ chỉ xem không thể thay đổi nền' : t('board.background')}
           >
             <Palette className="w-4 h-4 mr-0 sm:mr-2" />
             <span className="hidden sm:inline">{t('board.background')}</span>

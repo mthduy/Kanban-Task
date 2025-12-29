@@ -2,12 +2,12 @@ import type { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { Card } from '../models/Card.js';
 import { checkBoardAccessViaCard } from '../utils/checkBoardAccess.js';
+import { emitToBoardRoom } from '../socket.js';
 import {
   saveFile,
   deleteFile,
   readFile,
   generateFileName,
-
   getMimeType,
   getFileUrl,
 } from '../utils/attachmentStorage.js';
@@ -60,7 +60,7 @@ export const uploadAttachment = async (
       fileSize: file.size,
       fileType: file.mimetype,
       uploadedBy: authUserId,
-      fileUrl: fileName, // Store the actual filename here
+      fileUrl: fileName, 
       createdAt: new Date(),
     };
 
@@ -93,6 +93,12 @@ export const uploadAttachment = async (
     if (!responseAttachment) {
       return res.status(500).json({ message: 'Failed to save attachment' });
     }
+
+    // Emit real-time event
+    emitToBoardRoom(String(card.boardId), 'attachment-added', {
+      cardId: card._id,
+      attachment: responseAttachment,
+    });
 
     return res.status(201).json({
       message: 'Attachment uploaded successfully',
@@ -161,6 +167,12 @@ export const deleteAttachment = async (
     // Remove attachment from array
     card.attachments.splice(attachmentIndex, 1);
     await card.save();
+
+    // Emit real-time event
+    emitToBoardRoom(String(card.boardId), 'attachment-deleted', {
+      cardId: card._id,
+      attachmentId: attachmentId,
+    });
 
     return res.status(200).json({ message: 'Attachment deleted successfully' });
   } catch (error) {

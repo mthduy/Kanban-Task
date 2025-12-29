@@ -464,6 +464,41 @@ export default function CardModal({ ctxProp }: { ctxProp?: OutletContextType }) 
     return () => clearTimeout(timeoutId);
   }, [memberSearchText]);
 
+  // Listen for real-time attachment events
+  useEffect(() => {
+    if (!card?._id) return;
+
+    const handleAttachmentAdded = (data: { cardId: string; attachment: Attachment }) => {
+      if (String(data.cardId) === String(card._id)) {
+        setAttachments((prev) => {
+          // Check if attachment already exists
+          const exists = prev.some((a) => String(a._id) === String(data.attachment._id));
+          if (exists) return prev;
+          return [...prev, data.attachment];
+        });
+      }
+    };
+
+    const handleAttachmentDeleted = (data: { cardId: string; attachmentId: string }) => {
+      if (String(data.cardId) === String(card._id)) {
+        setAttachments((prev) => prev.filter((a) => String(a._id) !== String(data.attachmentId)));
+      }
+    };
+
+    // Import socketService if not already imported
+    import('@/lib/socket').then(({ default: socketService }) => {
+      socketService.onAttachmentAdded(handleAttachmentAdded);
+      socketService.onAttachmentDeleted(handleAttachmentDeleted);
+    });
+
+    return () => {
+      import('@/lib/socket').then(({ default: socketService }) => {
+        socketService.off('attachment-added', handleAttachmentAdded);
+        socketService.off('attachment-deleted', handleAttachmentDeleted);
+      });
+    };
+  }, [card?._id]);
+
   if (!card) return null;
 
   return createPortal(

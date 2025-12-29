@@ -42,10 +42,8 @@ const ProtectedRoute = () => {
       // Disconnect when user logs out
       socketService.disconnect();
     }
-
-    return () => {
-      socketService.disconnect();
-    };
+    
+    // Don't disconnect in cleanup - let socket persist across re-renders
   }, [accessToken, user]);
 
   if (starting || loading) {

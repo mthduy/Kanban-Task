@@ -18,7 +18,7 @@ Multi-language support (Vietnamese and English).
 
 **Frontend:**
 
-- React 19
+- React 18
 - TypeScript
 - Tailwind CSS
 - Zustand (State Management)

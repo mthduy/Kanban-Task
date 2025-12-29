@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { createPortal } from 'react-dom';
 import { formatTimeAgo, formatFullDateTime } from '@/lib/dateUtils';
 import { useTranslation } from 'react-i18next';
+import socketService from '@/lib/socket';
 
 const NotificationPanel = () => {
   const { t } = useTranslation();
@@ -47,7 +48,20 @@ const NotificationPanel = () => {
 
     // Poll for new notifications every 30 seconds
     const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
+    
+    // Listen for real-time notifications
+    const handleNewNotification = (data: { notification: Notification }) => {
+      console.log('📨 Received notification:', data.notification);
+      setNotifications((prev) => [data.notification, ...prev]);
+      setUnreadCount((prev) => prev + 1);
+    };
+    
+    socketService.onNotificationCreated(handleNewNotification);
+    
+    return () => {
+      clearInterval(interval);
+      socketService.socket?.off('notification-created', handleNewNotification);
+    };
   }, []);
 
   useEffect(() => {
@@ -275,7 +289,7 @@ const NotificationPanel = () => {
                                     return t('notification.boardMemberLeft', { name: senderName, board: boardTitle });
                                   case 'board_member_removed':
                                     if (looksLikeFullSentence) return raw;
-                                    return t('notification.boardMemberRemoved', { sender: senderName, name: notification.message || '' });
+                                    return t('notification.boardMemberRemoved', { sender: senderName, name: notification.message || '', board: boardTitle });
                                   case 'board_deleted':
                                     if (looksLikeFullSentence) return raw;
                                     return t('notification.boardDeleted', { board: boardTitle });

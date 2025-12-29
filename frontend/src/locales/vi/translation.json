@@ -114,7 +114,7 @@
     "workspaceMembers":"Thành viên không gian",
     "msg":"Bạn có thể mời thành viên vào không gian làm việc của mình để cùng cộng tác trên các bảng.", 
     "noWorkspaces":"Chưa có không gian làm việc", 
-    "dueCard":"Thẻ sẽ đến hạn vào ngày mai", 
+    "dueCard":"Thẻ sắp đến hạn", 
     "inviteToBoard":"đã mời bạn tham gia bảng", 
     "acceptInvite":"Chấp nhận lời mời", 
     "declineInvite":"Từ chối lời mời", 
@@ -158,7 +158,7 @@
     "workspaceDeleted": "Không gian làm việc \"{{workspace}}\" đã bị xóa",
     "cardAssigned": "{{sender}} đã thêm bạn vào thẻ \"{{card}}\"",
     "cardMoved": "{{sender}} đã di chuyển thẻ \"{{card}}\"",
-    "cardDueReminder": "Thẻ \"{{card}}\" sẽ đến hạn vào ngày mai",
+    "cardDueReminder": "Thẻ \"{{card}}\" sắp đến hạn vào ngày {{dueDate}}, hãy kiểm tra ngay!",
     "invitedToBoard": "đã mời bạn tham gia bảng"
   },
   "time": {

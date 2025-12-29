@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { Notification } from '../models/Notification.js';
+import { emitToUser } from '../socket.js';
 
 // GET all notifications for current user
 export const getNotifications = async (req: Request, res: Response, next: NextFunction) => {
@@ -140,6 +141,24 @@ export const createNotification = async (data: {
         : undefined,
       isRead: false,
     });
+    
+    // Populate and emit socket event
+    const populatedNotification = await Notification.findById(notification._id)
+      .populate('sender', 'displayName username avatarUrl')
+      .populate('relatedWorkspace', 'name')
+      .populate('relatedBoard', 'title')
+      .populate('relatedCard', 'title');
+    
+    console.log('📨 Emitting notification:', {
+      recipientId: String(data.recipient),
+      type: data.type,
+      notificationId: notification._id
+    });
+    
+    if (populatedNotification) {
+      emitToUser(String(data.recipient), 'notification-created', { notification: populatedNotification });
+    }
+    
     return notification;
   } catch (err) {
     console.error('createNotification error', err);

@@ -26,7 +26,10 @@ const DashBoardPage = () => {
   const user = useAuthStore((state) => state.user);
   const [showSidebarPreview, setShowSidebarPreview] = useState(false);
   const [showHeaderPreview, setShowHeaderPreview] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    // On mobile, default to collapsed
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  });
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspaceId, setSelectedWorkspaceId] = useState<string | null>(null);
   const [showCreateWorkspace, setShowCreateWorkspace] = useState(false);
@@ -613,16 +616,16 @@ const DashBoardPage = () => {
       <main className="flex-1 flex flex-col overflow-hidden pt-16 sm:pt-0">
         {/* Header với Gradient - Fixed on mobile */}
         <header className="flex-shrink-0 fixed top-0 left-0 right-0 z-50 sm:static glass-strong border-b border-[hsl(var(--border))] px-4 sm:px-8 py-3 sm:py-5 shadow-soft backdrop-blur-xl">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white mb-1">
+          <div className="flex justify-between items-center gap-2">
+            <div className="flex items-center gap-4 flex-shrink min-w-0">
+              <div className="min-w-0 flex-shrink">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white mb-1 truncate max-w-[200px] lg:max-w-md">
                   {workspaces.find(w => w._id === selectedWorkspaceId)?.name || 'Không gian làm việc'}
                 </h2>
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               <div className="relative hidden sm:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[hsl(var(--muted-foreground))]" />
                 <Input

@@ -113,13 +113,13 @@ export const listBoards = async (
     
     const userWorkspaceIds = userWorkspaces.map(ws => ws._id);
 
+    // Only show boards where user is owner or member
     const filters: FilterQuery<IBoard> = { 
       $and: [ 
         { 
           $or: [
             { owner: userId }, 
-            { members: userId },
-            { workspace: { $in: userWorkspaceIds } }
+            { members: userId }
           ] 
         } 
       ] 

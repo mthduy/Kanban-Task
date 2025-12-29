@@ -39,6 +39,24 @@ export const getUpcomingCards = async (req: Request, res: Response, next: NextFu
  * POST /api/reminders/check
  * Manually trigger due reminder check (for testing or admin purposes)
  */
+export const checkUpcomingReminders = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.user?._id;
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    await ReminderScheduler.runImmediately();
+
+    return res.status(200).json({
+      message: 'Kiểm tra nhắc hạn sắp tới (1 giờ) đã được thực hiện thành công',
+    });
+  } catch (error) {
+    console.error('checkUpcomingReminders error:', error);
+    return next(error);
+  }
+};
+
 export const getDueReminders = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?._id;
@@ -155,6 +173,7 @@ export const debugAllCards = async (req: Request, res: Response, next: NextFunct
 
 export default {
   getUpcomingCards,
+  checkUpcomingReminders,
   getDueReminders,
   sendManualReminder,
   debugAllCards,

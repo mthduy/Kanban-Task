@@ -153,12 +153,6 @@ export class ReminderService {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + daysAhead);
 
-      console.log(`\n=== getCardsDueForUser Debug ===`);
-      console.log(`User ID: ${userId}`);
-      console.log(`Days ahead: ${daysAhead}`);
-      console.log(`Include completed: ${includeCompleted}`);
-      console.log(`Date range: ${now.toISOString()} to ${futureDate.toISOString()}`);
-
       // Simplified query - just filter by date and user, not completion status by default
       const queryConditions: any = {
         members: userId,
@@ -178,12 +172,6 @@ export class ReminderService {
         .populate('boardId', 'title')
         .populate('listId', 'title')
         .sort({ completed: 1, dueDate: 1 }); // Sort incomplete first, then by due date
-
-      console.log(`\nFinal filtered cards: ${cards.length}`);
-      cards.forEach((card, i) => {
-        console.log(`${i+1}. "${card.title}" - Due: ${card.dueDate?.toISOString()} - Completed: ${card.completed}`);
-      });
-      console.log(`=== End Debug ===\n`);
 
       return cards;
     } catch (error) {

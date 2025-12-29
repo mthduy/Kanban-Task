@@ -47,7 +47,7 @@ _Main board view showing the drag-and-drop interface with multiple lists and car
 
 ### Frontend
 
-- **React 19** with TypeScript
+- **React 18** with TypeScript
 - **Vite** - Build tool
 - **Tailwind CSS** - Styling framework
 - **Zustand** - State management

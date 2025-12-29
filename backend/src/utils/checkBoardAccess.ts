@@ -9,9 +9,10 @@ import { BoardRole } from '../types/boardRoles.js';
  * Role determination (in order of priority):
  * 1. Board owner → OWNER (full control)
  * 2. Board member → EDITOR (can modify content)
- * 3. Workspace owner → EDITOR (can modify content)
- * 4. Workspace member → VIEWER (read-only)
- * 5. None of the above → null (no access)
+ * 3. None of the above → null (no access)
+ * 
+ * Note: Workspace owners/members do not have automatic access to boards
+ * unless they are explicitly added as board members.
  */
 export async function checkBoardAccess(
   boardId: string | mongoose.Types.ObjectId,
@@ -55,22 +56,8 @@ export async function checkBoardAccess(
       return { hasAccess: true, board, role: BoardRole.EDITOR };
     }
 
-    // Priority 3 & 4: Workspace owner/member → check workspace relationship
-    if (board.workspace && typeof board.workspace === 'object') {
-      const workspace = board.workspace as any;
-      const workspaceOwnerId = String(workspace.owner);
-      
-      // Workspace owner → EDITOR role (can manage workspace boards)
-      if (workspaceOwnerId === userIdStr) {
-        return { hasAccess: true, board, role: BoardRole.EDITOR };
-      }
-
-      // Workspace member (but NOT board member) → VIEWER role (read-only)
-      const isWorkspaceMember = (workspace.members || []).some((m: any) => String(m) === userIdStr);
-      if (isWorkspaceMember) {
-        return { hasAccess: true, board, role: BoardRole.VIEWER };
-      }
-    }
+    // Only board owner and board members have access
+    // Workspace owners/members do not have automatic access unless they are also board members
 
     // No access at all
     return { 
