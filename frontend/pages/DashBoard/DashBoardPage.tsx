@@ -15,8 +15,7 @@ import { useRef } from 'react';
 import { toast } from "sonner";
 import NotificationPanel from "@/components/notifications/NotificationPanel";
 import UpcomingCardsWidget from "@/components/board/UpcomingCardsWidget";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import SimpleThemeToggle from "@/components/SimpleThemeToggle";
+import UserMenu from "@/components/UserMenu";
 import { formatTimeAgo, formatFullDateTime } from '@/lib/dateUtils';
 import { useTranslation } from 'react-i18next';
 
@@ -25,7 +24,6 @@ const DashBoardPage = () => {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const [showSidebarPreview, setShowSidebarPreview] = useState(false);
-  const [showHeaderPreview, setShowHeaderPreview] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     // On mobile, default to collapsed
     return typeof window !== 'undefined' && window.innerWidth < 768;
@@ -653,36 +651,8 @@ const DashBoardPage = () => {
                 <span className="hidden sm:inline">{t('board.createBoard')}</span>
               </Button>
               
-             
-              
-              <SimpleThemeToggle />
-              <LanguageSwitcher />
               <NotificationPanel />
-               <div
-                className="cursor-pointer relative"
-                onClick={() => navigate("/profile")}
-                onMouseEnter={() => setShowHeaderPreview(true)}
-                onMouseLeave={() => setShowHeaderPreview(false)}
-              >
-                <Avatar className="w-11 h-11 ring-2 ring-[hsl(var(--primary))]/30 hover:ring-[hsl(var(--primary))]/60 transition-all duration-200">
-                  {user?.avatarUrl ? (
-                    <img src={user.avatarUrl} alt={user.username} />
-                  ) : (
-                    <AvatarFallback className="bg-gradient-chat text-[hsl(var(--primary-foreground))]">
-                      {(user?.displayName?.[0] || user?.username?.[0] || "U").toUpperCase()}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
-
-                {showHeaderPreview && (
-                  <div className="absolute right-0 mt-3 z-50">
-                    <div className="glass-strong text-sm p-4 rounded-xl shadow-glow border border-[hsl(var(--border))]">
-                      <div className="font-semibold text-[hsl(var(--foreground))]">{user?.displayName || user?.username}</div>
-                      <div className="text-xs text-[hsl(var(--muted-foreground))] mt-1">{user?.email}</div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <UserMenu />
               {/* Mobile search panel anchored under header */}
               {showMobileSearch && (
                 <div className="sm:hidden absolute left-0 right-0 top-full p-3 bg-background border-t border-[hsl(var(--border))] z-50">

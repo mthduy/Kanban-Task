@@ -77,13 +77,13 @@ class SocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-      console.log('🚀 Socket connected successfully');
+      console.log('Socket connected successfully');
       this.reconnectAttempts = 0;
       this.isConnecting = false;
     });
 
     this.socket.on('disconnect', (reason) => {
-      console.log('❌ Socket disconnected:', reason);
+      console.log('Socket disconnected:', reason);
       this.isConnecting = false;
       
       // Only attempt to reconnect for certain disconnect reasons
@@ -96,7 +96,7 @@ class SocketService {
     });
 
     this.socket.on('connect_error', (error) => {
-      console.error('❌ Socket connection error:', error);
+      console.error('Socket connection error:', error);
       if (error.message === 'Authentication failed') {
         console.error('Socket authentication failed');
         useAuthStore.getState().logout();
@@ -332,26 +332,26 @@ class SocketService {
     }
   }
 
-  onNotificationCreated(callback: (data: { notification: unknown }) => void) {
+  onNotificationCreated(callback: (data: { notification: any }) => void) {
     if (this.socket) {
       this.socket.on('notification-created', callback);
     }
   }
 
-  onAttachmentAdded(callback: (data: SocketEventData) => void) {
+  onAttachmentAdded(callback: (data: { cardId: string; attachment: any }) => void) {
     if (this.socket) {
       this.socket.on('attachment-added', callback);
     }
   }
 
-  onAttachmentDeleted(callback: (data: SocketEventData) => void) {
+  onAttachmentDeleted(callback: (data: { cardId: string; attachmentId: string }) => void) {
     if (this.socket) {
       this.socket.on('attachment-deleted', callback);
     }
   }
 
   // Remove specific event listeners
-  off(event: string, callback?: (data: SocketEventData) => void) {
+  off(event: string, callback?: (data: any) => void) {
     if (this.socket) {
       this.socket.off(event, callback);
     }

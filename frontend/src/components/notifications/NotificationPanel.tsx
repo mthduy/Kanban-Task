@@ -60,7 +60,7 @@ const NotificationPanel = () => {
     
     return () => {
       clearInterval(interval);
-      socketService.socket?.off('notification-created', handleNewNotification);
+      socketService.off('notification-created', handleNewNotification);
     };
   }, []);
 

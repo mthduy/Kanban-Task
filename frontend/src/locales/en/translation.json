@@ -113,7 +113,7 @@
     "workspaceMembers":"Workspace Members",
     "msg":"You can invite members to your workspace to collaborate on boards together.", 
     "noWorkspaces":"No workspaces yet", 
-    "dueCard":"Cards due tomorrow",
+    "dueCard":"Cards due",
     "inviteToBoard":"invited you to board",
     "acceptInvite":"Accept Invite",
     "declineInvite":"Decline Invite",
@@ -254,6 +254,12 @@
     "cancel": "Cancel",
     "logout": "Logout",
     "updated": "Profile updated"
+  },
+  "user": {
+    "profile": "Personal Information",
+    "settings": "Settings",
+    "theme": "Theme",
+    "language": "Language"
   }, 
   "dayOptions": {
   "motNgay": "1 day",

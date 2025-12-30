@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Plus, MoreHorizontal, Star, Users, Grid3x3, Calendar, Filter, X, Clock, Tag, User, Pencil, MessageSquare, Palette } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,8 +19,7 @@ import type { CardFilterOptions } from '@/services/cardService';
 import type { Board, ListItem, CardItem } from '@/types/board';
 import NotificationPanel from '@/components/notifications/NotificationPanel';
 import socketService from '@/lib/socket';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import SimpleThemeToggle from '@/components/SimpleThemeToggle';
+import UserMenu from '@/components/UserMenu';
 import { formatDueDate, isOverdue, formatFullDateTime } from '@/lib/dateUtils';
 import { useTranslation } from 'react-i18next';
 import {
@@ -177,7 +176,6 @@ const BoardPage = () => {
   const [userRole, setUserRole] = useState<'owner' | 'editor' | 'viewer' | null>(null);
   const user = useAuthStore((s) => s.user); //get user from store
   const navigate = useNavigate(); //hook to navigate programmatically
-  const [showUserPreview, setShowUserPreview] = useState(false);
   const [showCreateList, setShowCreateList] = useState(false);
   const [newListTitle, setNewListTitle] = useState('');
   const creatingRef = useRef(false); // ban multiple create list submissions
@@ -1848,57 +1846,8 @@ const BoardPage = () => {
 
           <div className="h-8 w-px bg-border mx-1"></div>
 
-          <SimpleThemeToggle />
-          <LanguageSwitcher />
           <NotificationPanel />
-
-          <div className="relative">
-                    {/* Removed 'All' time option per UX: filters are opt-in; use Reset to load all */}
-            <div
-              className="flex items-center gap-2 px-2.5 py-1.5 bg-gradient-chat rounded-xl shadow-soft hover:shadow-glow transition-all cursor-pointer"
-              onMouseEnter={() => setShowUserPreview(true)}
-              onMouseLeave={() => setShowUserPreview(false)}
-              onClick={() => navigate('/profile')}
-            >
-              <div className="w-7 h-7 bg-white rounded-lg flex items-center justify-center overflow-hidden">
-                {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
-                ) : (
-                  <span className="text-primary font-bold text-xs">{(user?.username?.[0] || 'U').toUpperCase()}</span>
-                )}
-              </div>
-            </div>
-
-            {showUserPreview && (
-              <div className="absolute right-0 top-full mt-2 z-100">
-                <Card className="w-64 glass-strong shadow-glow border-border message-bounce">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
-                        {user?.avatarUrl ? (
-                          <img src={user.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-chat flex items-center justify-center text-white font-bold text-sm">
-                            {(user?.username?.[0] || 'U').toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold truncate text-sm">{user?.displayName || user?.username}</h4>
-                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                      </div>
-                    </div>
-                    <div className="pt-3 border-t border-border">
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className="font-medium">Điện thoại:</span>
-                        <span className="text-foreground">{user?.phone || 'Chưa cập nhật'}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-          </div>
+          <UserMenu />
         </div>
       </header>
 

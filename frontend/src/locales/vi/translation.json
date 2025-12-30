@@ -258,6 +258,12 @@
     "cancel": "Hủy bỏ",
     "logout": "Đăng xuất",
     "updated": "Đã cập nhật hồ sơ"
+  },
+  "user": {
+    "profile": "Thông tin cá nhân",
+    "settings": "Cài đặt",
+    "theme": "Chủ đề",
+    "language": "Ngôn ngữ"
   }, 
     "dayOptions": { 
   "motNgay": "1 Ngày", 
